@@ -167,6 +167,73 @@
 </header>
 
 <!-- ========================================
+     MENÚ MÓVIL DRAWER
+======================================== -->
+<div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Menú móvil" aria-hidden="true">
+
+  <!-- Cabecera del menú -->
+  <div class="mobile-menu-header">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1H5a1 1 0 01-1-1V10.5z"/>
+          <rect x="9" y="14" width="6" height="7" rx="0.5" fill="rgba(255,255,255,0.35)"/>
+        </svg>
+      </div>
+      <span class="logo-name">QORI <span>WASI</span></span>
+    </div>
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <!-- Buscador móvil -->
+  <div class="mobile-search">
+    <i class="fas fa-search" aria-hidden="true"></i>
+    <input type="search" id="mobileSearchInput" placeholder="Buscar productos…" maxlength="100" autocomplete="off" aria-label="Buscar productos" />
+  </div>
+
+  <!-- Categorías rápidas -->
+  <div class="mobile-menu-section">
+    <span class="mobile-menu-label">Categorías</span>
+    <div class="mobile-cats">
+      <button class="mobile-cat-btn" data-section="soportes" data-close-menu>
+        <span aria-hidden="true">🖥️</span> Soportes &amp; Stands
+      </button>
+      <button class="mobile-cat-btn" data-section="iluminacion" data-close-menu>
+        <span aria-hidden="true">💡</span> Iluminación LED
+      </button>
+      <button class="mobile-cat-btn" data-section="perifericos" data-close-menu>
+        <span aria-hidden="true">⌨️</span> Periféricos
+      </button>
+      <button class="mobile-cat-btn" data-section="organizacion" data-close-menu>
+        <span aria-hidden="true">🗒️</span> Organización Tech
+      </button>
+    </div>
+  </div>
+
+  <!-- Links principales -->
+  <div class="mobile-menu-section">
+    <span class="mobile-menu-label">Menú</span>
+    <ul class="mobile-nav-links">
+      <li><a href="#productos" data-close-menu><i class="fas fa-th-large" aria-hidden="true"></i> Todos los productos</a></li>
+      <li><a href="#ofertas"   data-close-menu><i class="fas fa-tag"      aria-hidden="true"></i> Ofertas del día</a></li>
+      <li><a href="#"         data-close-menu><i class="far fa-user"      aria-hidden="true"></i> Mi cuenta</a></li>
+      <li><a href="#"         data-close-menu><i class="far fa-heart"     aria-hidden="true"></i> Favoritos</a></li>
+    </ul>
+  </div>
+
+  <!-- Trust items -->
+  <div class="mobile-trust">
+    <div class="mobile-trust-item"><i class="fas fa-truck" aria-hidden="true"></i> Envío gratis desde S/ 150</div>
+    <div class="mobile-trust-item"><i class="fas fa-undo"  aria-hidden="true"></i> Devolución 30 días</div>
+    <div class="mobile-trust-item"><i class="fas fa-shield-alt" aria-hidden="true"></i> Pago seguro garantizado</div>
+  </div>
+
+</nav>
+
+<!-- ========================================
      HERO
 ======================================== -->
 <section class="hero">

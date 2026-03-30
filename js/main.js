@@ -623,6 +623,63 @@ const initSearch = () => {
 };
 
 // ============================================
+// MENÚ MÓVIL
+// ============================================
+const initMobileMenu = () => {
+  const overlay  = document.getElementById('mobileOverlay');
+  const menu     = document.getElementById('mobileMenu');
+  const openBtn  = document.querySelector('.mobile-menu-btn');
+  const closeBtn = document.getElementById('mobileMenuClose');
+
+  if (!menu || !overlay) return;
+
+  const openMenu = () => {
+    menu.classList.add('open');
+    overlay.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    overlay.setAttribute('aria-hidden', 'false');
+    openBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus();
+  };
+
+  const closeMenu = () => {
+    menu.classList.remove('open');
+    overlay.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    overlay.setAttribute('aria-hidden', 'true');
+    openBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    openBtn?.focus();
+  };
+
+  openBtn?.addEventListener('click', openMenu);
+  closeBtn?.addEventListener('click', closeMenu);
+  overlay?.addEventListener('click', closeMenu);
+
+  // Cerrar al hacer clic en links/botones con data-close-menu
+  menu.querySelectorAll('[data-close-menu]').forEach(el => {
+    el.addEventListener('click', closeMenu);
+  });
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+  });
+
+  // Buscador móvil
+  const mobileSearchInput = document.getElementById('mobileSearchInput');
+  mobileSearchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const query = mobileSearchInput.value.trim();
+      if (query.length < 2) { showToast('Escribe al menos 2 caracteres'); return; }
+      showToast(`Buscando: "${escapeHtml(query)}"…`);
+      closeMenu();
+    }
+  });
+};
+
+// ============================================
 // ANNOUNCEMENT BAR
 // ============================================
 const initAnnouncement = () => {
@@ -710,6 +767,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initCountdown();
     initCartDrawer();
+    initMobileMenu();
     initNewsletter();
     initSearch();
     initAnnouncement();
