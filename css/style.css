@@ -2372,3 +2372,236 @@ input[type="search"]::-webkit-search-decoration {
 @media print {
   .whatsapp-float { display: none !important; }
 }
+
+/* ============================================
+   HERO MICRO-TRUST
+   ============================================ */
+.hero-microtrust {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.hero-microtrust span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.04em;
+}
+
+/* ============================================
+   BENEFICIOS
+   ============================================ */
+.benefits-section {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 48px var(--gap);
+}
+
+.benefits-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.benefit-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.benefit-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--dark);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.benefit-desc {
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .benefits-inner { grid-template-columns: 1fr; gap: 20px; }
+  .benefits-section { padding: 32px var(--gap-mobile); }
+}
+
+/* ============================================
+   FEATURED BANNER — elementos de venta
+   ============================================ */
+.banner-benefits {
+  list-style: none;
+  margin: 16px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.banner-benefits li {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.8);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.banner-pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.banner-price-old {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.35);
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.banner-price {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -0.03em;
+}
+
+.banner-badge-save {
+  background: var(--accent);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.banner-stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+}
+
+.stock-dot {
+  width: 8px;
+  height: 8px;
+  background: #4ECFCA;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.75); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stock-dot { animation: none; }
+}
+
+/* ============================================
+   WHATSAPP CTA SECTION
+   ============================================ */
+.wa-cta-section {
+  background: #0A0A0A;
+  padding: 72px var(--gap);
+}
+
+.wa-cta-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 48px;
+}
+
+.wa-cta-title {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  color: white;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 10px 0 12px;
+}
+
+.wa-cta-desc {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  max-width: 420px;
+}
+
+.wa-cta-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.wa-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #25D366;
+  color: white;
+  padding: 18px 32px;
+  border-radius: 4px;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 24px rgba(37,211,102,0.3);
+}
+
+.wa-cta-btn i { font-size: 1.3rem; }
+
+.wa-cta-btn:hover {
+  background: #1DAA54;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+  color: white;
+}
+
+.wa-cta-note {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 700px) {
+  .wa-cta-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+  .wa-cta-desc { max-width: 100%; }
+  .wa-cta-action { align-items: stretch; }
+  .wa-cta-btn { justify-content: center; }
+  .wa-cta-section { padding: 48px var(--gap-mobile); }
+}
