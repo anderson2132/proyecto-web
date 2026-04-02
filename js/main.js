@@ -1,5 +1,5 @@
 /* ============================================
-   QORI WASI — JavaScript Principal
+   WASI TECH — JavaScript Principal
    Versión auditada y refactorizada
    ============================================ */
 
@@ -44,7 +44,7 @@ const createElement = (tag, attrs = {}, children = []) => {
 const catalog = [
   // SOPORTES & STANDS
   {
-    id: 1, nombre: 'Soporte Monitor Elevador Bambú', marca: 'Qori Wasi',
+    id: 1, nombre: 'Soporte Monitor Elevador Bambú', marca: 'Wasi Tech',
     precio: 89.90, precioOriginal: 119.90, descuento: 25,
     cat: 'soportes', emoji: '🖥️', rating: 4.9, reviews: 342,
     badge: 'sale', desc: 'Madera de bambú sostenible con bandeja organizadora inferior. Eleva 10cm.'
@@ -56,7 +56,7 @@ const catalog = [
     badge: 'hot', desc: 'Brazo VESA 75/100mm, carga máx. 8kg por pantalla. Ajuste en 360°.'
   },
   {
-    id: 3, nombre: 'Soporte Laptop Plegable Aluminio', marca: 'Qori Wasi',
+    id: 3, nombre: 'Soporte Laptop Plegable Aluminio', marca: 'Wasi Tech',
     precio: 69.90, precioOriginal: 89.90, descuento: 22,
     cat: 'soportes', emoji: '💻', rating: 4.7, reviews: 597,
     badge: 'sale', desc: 'Aleación de aluminio 6061. Plegable, altura ajustable en 6 niveles.'
@@ -68,7 +68,7 @@ const catalog = [
     badge: 'new', desc: 'Compatible con dispositivos de 4" a 13". Rotación completa.'
   },
   {
-    id: 5, nombre: 'Soporte Documentos Vertical Acrílico', marca: 'Qori Wasi',
+    id: 5, nombre: 'Soporte Documentos Vertical Acrílico', marca: 'Wasi Tech',
     precio: 45.00, precioOriginal: 58.00, descuento: 22,
     cat: 'soportes', emoji: '📋', rating: 4.5, reviews: 189,
     badge: null, desc: 'Acrílico transparente. Sostenedor de documentos A4 con clip ajustable.'
@@ -131,7 +131,7 @@ const catalog = [
   },
   // ORGANIZACIÓN
   {
-    id: 15, nombre: 'Organizador Desk Pad XL 90x40cm', marca: 'Qori Wasi',
+    id: 15, nombre: 'Organizador Desk Pad XL 90x40cm', marca: 'Wasi Tech',
     precio: 79.90, precioOriginal: null, descuento: 0,
     cat: 'organizacion', emoji: '🗒️', rating: 4.9, reviews: 2341,
     badge: 'hot', desc: 'Base antideslizante. Piel vegana premium. 5 colores disponibles.'
@@ -191,11 +191,11 @@ const saveToStorage = (key, value) => {
   }
 };
 
-let cart     = loadFromStorage('qoriwasi_cart', []);
-let wishlist = loadFromStorage('qoriwasi_wish', []);
+let cart     = loadFromStorage('wasitech_cart', []);
+let wishlist = loadFromStorage('wasitech_wish', []);
 
 const saveCart = () => {
-  saveToStorage('qoriwasi_cart', cart);
+  saveToStorage('wasitech_cart', cart);
   updateCartBadge();
   renderCartDrawer();
 };
@@ -477,7 +477,7 @@ const toggleWish = (btn, id) => {
     btn.classList.add('active');
     showToast('Guardado en favoritos');
   }
-  saveToStorage('qoriwasi_wish', wishlist);
+  saveToStorage('wasitech_wish', wishlist);
 };
 
 // ============================================
@@ -776,6 +776,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartBadge();
     renderCartDrawer();
   } catch (e) {
-    console.error('Error al inicializar Qori Wasi:', e);
+    console.error('Error al inicializar Wasi Tech:', e);
   }
 });
