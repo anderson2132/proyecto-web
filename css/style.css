@@ -8,14 +8,14 @@
 :root {
   --dark:        #272727;
   --dark-hover:  #1a1a1a;
-  --accent:      #C4973A;
-  --accent-dark: #A67C28;
-  --accent-light: #E8B84B;
+  --accent:      #0066FF;
+  --accent-dark: #0047CC;
+  --accent-light: #4D94FF;
   --white:       #FFFFFF;
   --black:       #000000;
   --bg:          #FFFFFF;
-  --bg-soft:     #FAF7F2;
-  --bg-card:     #FBF8F3;
+  --bg-soft:     #F4F8FF;
+  --bg-card:     #F7FBFF;
   --border:      #E8E8E8;
   --border-dark: #D0D0D0;
   --text:        #272727;
@@ -2108,49 +2108,49 @@ button { font-family: var(--font); cursor: pointer; }
    (movidos desde inline <style> en index.html)
    ============================================ */
 
-/* Logo dorado */
+/* Logo azul */
 .logo-mark {
-  background: linear-gradient(135deg, #C4973A, #E8B84B);
+  background: linear-gradient(135deg, #0066FF, #4D94FF);
 }
 .logo-mark svg { fill: white; }
 
-/* Línea dorada bajo el header */
+/* Línea azul bajo el header */
 .header::after {
   content: '';
   display: block;
   height: 2px;
-  background: linear-gradient(90deg, #C4973A 0%, #E8B84B 50%, #C4973A 100%);
+  background: linear-gradient(90deg, #0066FF 0%, #4D94FF 50%, #0066FF 100%);
 }
 
-/* Announcement bar oscuro cálido */
-.announcement-bar { background: #1C1A14; }
+/* Announcement bar negro */
+.announcement-bar { background: #0A0A0A; }
 .announcement-bar a { color: var(--accent); }
 
-/* Hero bg cálido */
+/* Hero bg oscuro */
 .hero-bg {
-  background: linear-gradient(135deg, #141210 0%, #1C1A14 40%, #252218 100%);
+  background: linear-gradient(135deg, #050507 0%, #0C0C14 40%, #111120 100%);
 }
 
-/* Hero eyebrow dorado */
+/* Hero eyebrow azul */
 .hero-eyebrow {
   color: var(--accent);
-  background: rgba(196,151,58,0.1);
-  border-color: rgba(196,151,58,0.25);
+  background: rgba(0,102,255,0.1);
+  border-color: rgba(0,102,255,0.2);
 }
 .hero-eyebrow span { background: var(--accent); }
 
-/* Hero card dorada */
-.hero-card-bg-2 { background: linear-gradient(135deg, #fdf6e8 0%, #f5e6c0 100%); }
+/* Hero card azul suave */
+.hero-card-bg-2 { background: linear-gradient(135deg, #EEF4FF 0%, #D4E6FF 100%); }
 
 /* Section eyebrow */
 .section-eyebrow { color: var(--accent); }
 
-/* Footer logo dorado */
+/* Footer logo azul */
 .footer-brand-col .logo-mark {
-  background: linear-gradient(135deg, #C4973A, #E8B84B);
+  background: linear-gradient(135deg, #0066FF, #4D94FF);
 }
 
-/* Stars y ratings dorados */
+/* Stars y ratings */
 .stars-icons      { color: var(--accent); }
 .testimonial-stars { color: var(--accent); }
 
@@ -2243,6 +2243,7 @@ input[type="search"]::-webkit-search-decoration {
   .cart-drawer,
   .toast,
   .tab-nav,
+  .whatsapp-float,
   .btn { display: none !important; }
 
   body { font-size: 12pt; color: #000; background: #fff; }
@@ -2259,4 +2260,54 @@ input[type="search"]::-webkit-search-decoration {
   .footer-links a, .footer-copy { color: #333; }
 
   a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
+}
+
+/* ============================================
+   WHATSAPP FLOTANTE
+   ============================================ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: white;
+  padding: 14px 20px 14px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  z-index: 9998;
+  transition: all 0.22s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.whatsapp-float i { font-size: 1.5rem; line-height: 1; }
+
+.whatsapp-float:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+  background: #1DAA54;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .whatsapp-float {
+    bottom: 20px;
+    right: 20px;
+    padding: 14px;
+    border-radius: 50%;
+    min-width: 52px;
+    min-height: 52px;
+    justify-content: center;
+  }
+  .whatsapp-float-label { display: none; }
+}
+
+@media print {
+  .whatsapp-float { display: none !important; }
 }
