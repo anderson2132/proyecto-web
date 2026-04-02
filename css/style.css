@@ -2154,23 +2154,84 @@ button { font-family: var(--font); cursor: pointer; }
 .stars-icons      { color: var(--accent); }
 .testimonial-stars { color: var(--accent); }
 
-/* Slogan bajo el logo */
+/* ============================================
+   LOGO BADGE — Wasi Tech
+   ============================================ */
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #2B2B2B;
+  padding: 9px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease;
+}
+
+.logo-badge:hover { opacity: 0.88; }
+
+.lb-wasi {
+  font-family: var(--font);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.lb-divider {
+  width: 1.5px;
+  height: 30px;
+  background: #4ECFCA;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.lb-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.lb-tech {
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4ECFCA;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.lb-store {
+  font-family: var(--font);
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: rgba(78,207,202,0.65);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Versión compacta en móvil */
+@media (max-width: 400px) {
+  .logo-badge { padding: 7px 12px; gap: 9px; }
+  .lb-wasi { font-size: 1.05rem; }
+  .lb-divider { height: 24px; }
+  .lb-tech { font-size: 0.65rem; }
+  .lb-store { font-size: 0.5rem; }
+}
+
+/* Logo en mobile-menu-header (ya tiene fondo oscuro, mostrar sin bg) */
+.mobile-menu-header .logo-badge {
+  background: transparent;
+  padding: 0;
+}
+
+/* Legado — ocultar elementos del logo anterior si quedan */
 .logo-slogan { display: none; }
 .logo-row    { display: flex; align-items: center; gap: 10px; }
-
-@media (min-width: 1000px) {
-  .logo { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .logo-slogan {
-    display: block;
-    font-size: 0.55rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-soft);
-    padding-left: 44px;
-    margin-top: -2px;
-  }
-}
 
 /* Search input — suprimir botón nativo de limpieza */
 input[type="search"]::-webkit-search-cancel-button,
