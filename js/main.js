@@ -1115,8 +1115,47 @@ function initWelcomePopup() {
       return;
     }
 
-    // Aquí iría la llamada real a tu backend / servicio de email
-    // Por ahora simulamos éxito
-    closePopup(true);
+    // ── Conectar con MailerLite ──────────────────────────────────
+    // INSTRUCCIONES:
+    //   1. Ve a mailerlite.com → Forms → tu formulario → Settings
+    //   2. Copia el Account ID y el Form ID y pégalos aquí abajo
+    //   3. Guarda y haz push a GitHub
+    // ─────────────────────────────────────────────────────────────
+    const ML_ACCOUNT_ID = 'TU_ACCOUNT_ID'; // ← reemplaza con tu Account ID
+    const ML_FORM_ID    = 'TU_FORM_ID';    // ← reemplaza con tu Form ID
+
+    const submitBtn = form.querySelector('.popup-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+    errorEl.textContent = '';
+
+    const url = `https://assets.mailerlite.com/jsonp/${ML_ACCOUNT_ID}/forms/${ML_FORM_ID}/subscribe`;
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `fields[email]=${encodeURIComponent(email)}`
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Error de red');
+      return res.json();
+    })
+    .then(function(data) {
+      if (data.success) {
+        closePopup(true);
+      } else {
+        throw new Error(data.message || 'No se pudo suscribir');
+      }
+    })
+    .catch(function() {
+      // Si los IDs no están configurados aún, igual cerramos con éxito
+      // Quita esta línea cuando tengas los IDs reales de MailerLite
+      if (ML_ACCOUNT_ID === 'TU_ACCOUNT_ID') { closePopup(true); return; }
+      errorEl.textContent = 'Hubo un error. Intenta de nuevo o escríbenos por WhatsApp.';
+    })
+    .finally(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Obtener descuento';
+    });
   });
 }
