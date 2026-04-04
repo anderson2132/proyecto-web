@@ -2374,6 +2374,232 @@ input[type="search"]::-webkit-search-decoration {
 }
 
 /* ============================================
+   POPUP BIENVENIDA — 10% descuento
+   ============================================ */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  backdrop-filter: blur(4px);
+}
+
+.popup-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.popup-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -44%) scale(0.94);
+  z-index: 10001;
+  width: min(92vw, 820px);
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.popup-modal.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Panel izquierdo — visual */
+.popup-visual {
+  background: #0A0A0A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px 24px;
+  position: relative;
+}
+
+.popup-badge {
+  font-size: 3.6rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+  font-family: var(--font);
+  line-height: 1;
+}
+
+.popup-visual-icon {
+  font-size: 2.8rem;
+}
+
+/* Panel derecho — body */
+.popup-body {
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: var(--bg-soft);
+  border: none;
+  border-radius: 50%;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  z-index: 1;
+}
+
+.popup-close:hover {
+  background: var(--border-dark);
+  color: var(--dark);
+}
+
+.popup-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.popup-title {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 900;
+  color: var(--dark);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.popup-desc {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin-bottom: 22px;
+}
+
+.popup-form { width: 100%; }
+
+.popup-input-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.popup-input-row input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-btn);
+  font-family: var(--font);
+  font-size: 0.875rem;
+  color: var(--dark);
+  background: var(--bg-soft);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.popup-input-row input:focus {
+  border-color: var(--accent);
+  background: white;
+}
+
+.popup-submit {
+  height: 46px;
+  padding: 0 22px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition);
+}
+
+.popup-submit:hover { background: var(--accent-dark); }
+
+.popup-form-error {
+  font-size: 0.75rem;
+  color: var(--error);
+  margin-top: 8px;
+  min-height: 18px;
+  font-weight: 600;
+}
+
+.popup-legal {
+  font-size: 0.68rem;
+  color: var(--text-soft);
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+.popup-skip {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: var(--text-soft);
+  font-size: 0.68rem;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: var(--font);
+  padding: 0;
+  transition: color var(--transition);
+}
+
+.popup-skip:hover { color: var(--text-mid); }
+
+/* Responsive móvil */
+@media (max-width: 600px) {
+  .popup-modal {
+    grid-template-columns: 1fr;
+    width: min(94vw, 420px);
+  }
+  .popup-visual {
+    padding: 28px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+  .popup-badge { font-size: 2.4rem; }
+  .popup-visual-icon { font-size: 2rem; }
+  .popup-body { padding: 24px 20px 20px; }
+  .popup-submit { width: 100%; }
+  .popup-input-row { flex-direction: column; }
+}
+
+@media print {
+  .popup-overlay, .popup-modal { display: none !important; }
+}
+
+/* ============================================
    HERO MICRO-TRUST
    ============================================ */
 .hero-microtrust {

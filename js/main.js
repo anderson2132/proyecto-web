@@ -775,7 +775,90 @@ document.addEventListener('DOMContentLoaded', () => {
     initDataDelegation();
     updateCartBadge();
     renderCartDrawer();
+    initWelcomePopup();
   } catch (e) {
     console.error('Error al inicializar Wasi Tech:', e);
   }
 });
+
+// ============================================
+// POPUP BIENVENIDA — 10% descuento
+// ============================================
+function initWelcomePopup() {
+  const STORAGE_KEY = 'wasitech_popup_seen';
+  const DELAY_MS    = 3000; // 3 segundos tras cargar
+
+  // No mostrar si ya lo vio o ya está suscrito
+  if (loadFromStorage(STORAGE_KEY, false)) return;
+
+  const overlay = document.getElementById('popupOverlay');
+  const modal   = document.getElementById('popupModal');
+  const closeBtn = document.getElementById('popupClose');
+  const skipBtn  = document.getElementById('popupSkip');
+  const form     = document.getElementById('popupForm');
+  const errorEl  = document.getElementById('popupError');
+
+  if (!overlay || !modal) return;
+
+  function openPopup() {
+    overlay.setAttribute('aria-hidden', 'false');
+    modal.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('open');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Foco al modal para accesibilidad
+    const firstInput = modal.querySelector('input, button');
+    if (firstInput) firstInput.focus();
+  }
+
+  function closePopup(subscribed) {
+    overlay.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('open');
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    saveToStorage(STORAGE_KEY, true);
+    if (subscribed) {
+      setTimeout(() => showToast('🎉 ¡Cupón enviado! Revisa tu correo'), 400);
+    }
+  }
+
+  // Mostrar tras el delay
+  setTimeout(openPopup, DELAY_MS);
+
+  // Cerrar con X
+  closeBtn.addEventListener('click', () => closePopup(false));
+
+  // Cerrar con "No gracias"
+  skipBtn.addEventListener('click', () => closePopup(false));
+
+  // Cerrar con overlay
+  overlay.addEventListener('click', () => closePopup(false));
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', function onEsc(e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closePopup(false);
+      document.removeEventListener('keydown', onEsc);
+    }
+  });
+
+  // Envío del formulario
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorEl.textContent = '';
+
+    const emailInput = document.getElementById('popupEmail');
+    const email = emailInput ? emailInput.value.trim() : '';
+
+    if (!EMAIL_REGEX.test(email)) {
+      errorEl.textContent = 'Ingresa un correo válido para recibir tu cupón.';
+      emailInput.focus();
+      return;
+    }
+
+    // Aquí iría la llamada real a tu backend / servicio de email
+    // Por ahora simulamos éxito
+    closePopup(true);
+  });
+}

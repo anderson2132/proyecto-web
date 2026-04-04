@@ -825,6 +825,49 @@
 </div>
 
 <!-- ========================================
+     POPUP BIENVENIDA — 10% descuento
+======================================== -->
+<div class="popup-overlay" id="popupOverlay" aria-hidden="true"></div>
+<div class="popup-modal" id="popupModal" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-hidden="true">
+  <button class="popup-close" id="popupClose" aria-label="Cerrar ventana">
+    <i class="fas fa-times" aria-hidden="true"></i>
+  </button>
+
+  <div class="popup-visual" aria-hidden="true">
+    <div class="popup-badge">10%</div>
+    <span class="popup-visual-icon">🎁</span>
+  </div>
+
+  <div class="popup-body">
+    <p class="popup-eyebrow">Solo para nuevos clientes</p>
+    <h2 class="popup-title" id="popupTitle">10% OFF en<br>tu primera compra</h2>
+    <p class="popup-desc">Suscríbete y recibe tu cupón al instante. Además, guías de setup y ofertas exclusivas cada semana.</p>
+
+    <form class="popup-form" id="popupForm" novalidate>
+      <label for="popupEmail" class="sr-only">Correo electrónico</label>
+      <div class="popup-input-row">
+        <input
+          type="email"
+          id="popupEmail"
+          name="email"
+          placeholder="tu@correo.com"
+          required
+          autocomplete="email"
+          maxlength="254"
+          aria-required="true"
+        />
+        <button type="submit" class="popup-submit">Obtener descuento</button>
+      </div>
+      <p class="popup-form-error" id="popupError" role="alert" aria-live="polite"></p>
+    </form>
+
+    <p class="popup-legal">Sin spam · Cancela cuando quieras · Tu privacidad es lo primero</p>
+
+    <button class="popup-skip" id="popupSkip" type="button">No gracias, prefiero pagar precio completo</button>
+  </div>
+</div>
+
+<!-- ========================================
      TOAST
 ======================================== -->
 <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
