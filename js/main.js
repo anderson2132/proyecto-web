@@ -776,10 +776,268 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartBadge();
     renderCartDrawer();
     initWelcomePopup();
+    initChatbot();
   } catch (e) {
     console.error('Error al inicializar Wasi Tech:', e);
   }
 });
+
+// ============================================
+// CHATBOT — WASI BOT
+// ============================================
+function initChatbot() {
+  const WA_URL = 'https://wa.me/51994932902?text=Hola%20Wasi%20Tech%2C%20necesito%20ayuda%20con%20mi%20compra';
+
+  // Árbol de conversación
+  const TREE = {
+    welcome: {
+      msg: '¡Hola! 👋 Soy <strong>Wasi Bot</strong>, tu asistente de home office.\n\n¿En qué puedo ayudarte hoy?',
+      replies: [
+        { label: '🖥️ Ver productos',        next: 'productos'     },
+        { label: '🚚 Envíos y entregas',     next: 'envios'        },
+        { label: '💳 Métodos de pago',       next: 'pagos'         },
+        { label: '🔄 Devoluciones',          next: 'devoluciones'  },
+        { label: '💬 Hablar con asesor',     next: 'whatsapp', action: 'whatsapp' },
+      ]
+    },
+    productos: {
+      msg: '¿Qué categoría te interesa explorar?',
+      replies: [
+        { label: '🖥️ Soportes & Stands',    next: 'cat_soportes'     },
+        { label: '💡 Iluminación LED',       next: 'cat_iluminacion'  },
+        { label: '⌨️ Periféricos',           next: 'cat_perifericos'  },
+        { label: '🗒️ Organización',          next: 'cat_organizacion' },
+        { label: '← Menú principal',        next: 'welcome'          },
+      ]
+    },
+    cat_soportes: {
+      msg: '🖥️ <strong>Soportes & Stands</strong>\n\n⭐ Más vendido: <strong>Soporte Monitor Bambú</strong>\nS/ 89.90 <s style="opacity:.5">S/ 129.90</s>\n\nTambién: brazos articulados, soportes laptop y reposamuñecas.',
+      replies: [
+        { label: '🛒 Ver soportes',             next: 'ir_seccion', action: 'section', target: 'soportes'    },
+        { label: '💬 Quiero asesoría',          next: 'whatsapp',   action: 'whatsapp'                       },
+        { label: '← Volver a productos',        next: 'productos'                                            },
+      ]
+    },
+    cat_iluminacion: {
+      msg: '💡 <strong>Iluminación LED</strong>\n\nLámparas de escritorio sin fatiga visual, clips para monitor y ring lights para videollamadas.\n\nDesde <strong>S/ 59.90</strong>.',
+      replies: [
+        { label: '🛒 Ver iluminación',           next: 'ir_seccion', action: 'section', target: 'iluminacion' },
+        { label: '💬 Quiero asesoría',           next: 'whatsapp',   action: 'whatsapp'                       },
+        { label: '← Volver a productos',         next: 'productos'                                            },
+      ]
+    },
+    cat_perifericos: {
+      msg: '⌨️ <strong>Periféricos Ergonómicos</strong>\n\nTeclados mecánicos, ratones ergonómicos, webcams HD y auriculares de calidad.\n\nDesde <strong>S/ 69.90</strong>.',
+      replies: [
+        { label: '🛒 Ver periféricos',           next: 'ir_seccion', action: 'section', target: 'perifericos' },
+        { label: '💬 Quiero asesoría',           next: 'whatsapp',   action: 'whatsapp'                       },
+        { label: '← Volver a productos',         next: 'productos'                                            },
+      ]
+    },
+    cat_organizacion: {
+      msg: '🗒️ <strong>Organización Tech</strong>\n\nDesk pads XL, hubs USB-C, gestión de cables y cargadores.\n\nDesde <strong>S/ 39.90</strong>.',
+      replies: [
+        { label: '🛒 Ver organización',          next: 'ir_seccion', action: 'section', target: 'organizacion'},
+        { label: '💬 Quiero asesoría',           next: 'whatsapp',   action: 'whatsapp'                       },
+        { label: '← Volver a productos',         next: 'productos'                                            },
+      ]
+    },
+    envios: {
+      msg: '🚚 <strong>Envíos y entregas</strong>\n\n📍 <strong>Lima:</strong> 24 horas hábiles\n📦 <strong>Provincias:</strong> 3 a 5 días hábiles\n✓ Envío <strong>GRATIS</strong> desde S/ 150',
+      replies: [
+        { label: '📦 Rastrear mi pedido',       next: 'rastreo'   },
+        { label: '🗺️ ¿Llegan a mi ciudad?',     next: 'cobertura' },
+        { label: '← Menú principal',            next: 'welcome'   },
+      ]
+    },
+    rastreo: {
+      msg: '📦 Para rastrear tu pedido necesitas el número de orden que te enviamos al correo.\n\nTambién puedes escribirnos por WhatsApp con tu nombre y lo revisamos al instante. 👇',
+      replies: [
+        { label: '💬 Consultar por WhatsApp',   next: 'whatsapp', action: 'whatsapp' },
+        { label: '← Envíos',                    next: 'envios'                       },
+      ]
+    },
+    cobertura: {
+      msg: '🗺️ Hacemos envíos a <strong>todo el Perú</strong> con Olva Courier y Shalom.\n\nSi tu ciudad es muy alejada, te avisamos antes de confirmar. 👍',
+      replies: [
+        { label: '🛒 Ver productos',             next: 'productos' },
+        { label: '← Envíos',                    next: 'envios'    },
+      ]
+    },
+    pagos: {
+      msg: '💳 <strong>Métodos de pago</strong>\n\n✓ Visa y Mastercard\n✓ Yape y Plin\n✓ Transferencia BCP / Interbank\n✓ Pago contra entrega (Lima)\n\n🔒 100% seguro y encriptado.',
+      replies: [
+        { label: '🔒 ¿Es seguro pagar online?', next: 'seguridad' },
+        { label: '🛒 Ir a comprar',              next: 'ir_seccion', action: 'section', target: 'productos' },
+        { label: '← Menú principal',            next: 'welcome'   },
+      ]
+    },
+    seguridad: {
+      msg: '🔒 Usamos <strong>SSL de 256 bits</strong> en todos los pagos. Nunca guardamos datos de tarjetas.\n\nAdemás, tienes <strong>30 días de garantía</strong> para devolver si no estás satisfecho. ✅',
+      replies: [
+        { label: '🛒 Ver productos',             next: 'productos' },
+        { label: '← Pagos',                     next: 'pagos'     },
+      ]
+    },
+    devoluciones: {
+      msg: '🔄 <strong>Política de devoluciones</strong>\n\n✓ 30 días para solicitar\n✓ Producto en estado original\n✓ Reembolso en 3-5 días hábiles\n✓ Sin preguntas complicadas',
+      replies: [
+        { label: '📋 Iniciar devolución',        next: 'iniciar_dev'                  },
+        { label: '← Menú principal',            next: 'welcome'                      },
+      ]
+    },
+    iniciar_dev: {
+      msg: 'Para iniciar una devolución escríbenos por WhatsApp con:\n\n• Número de orden\n• Motivo de devolución\n• Foto del producto\n\nTe respondemos en menos de 2 horas. ⚡',
+      replies: [
+        { label: '💬 Iniciar por WhatsApp',     next: 'whatsapp', action: 'whatsapp' },
+        { label: '← Devoluciones',              next: 'devoluciones'                 },
+      ]
+    },
+    whatsapp: {
+      msg: '💬 Abriendo WhatsApp...\n\nUn asesor real te atenderá en <strong>menos de 10 minutos</strong>. 🚀',
+      replies: [
+        { label: '← Volver al menú',            next: 'welcome' },
+      ]
+    },
+    ir_seccion: {
+      msg: 'Perfecto, te llevo a la sección. ¡Explora y agrega lo que te guste al carrito! 🛒',
+      replies: [
+        { label: '← Menú principal',            next: 'welcome' },
+      ]
+    }
+  };
+
+  const wrap    = document.getElementById('chatbotWrap');
+  const bubble  = document.getElementById('chatbotBubble');
+  const panel   = document.getElementById('chatbotPanel');
+  const closeBtn= document.getElementById('chatbotClose');
+  const messagesEl = document.getElementById('chatbotMessages');
+  const repliesEl  = document.getElementById('chatbotReplies');
+
+  if (!wrap || !bubble || !panel) return;
+
+  let isOpen = false;
+
+  function openChat() {
+    isOpen = true;
+    wrap.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    bubble.setAttribute('aria-expanded', 'true');
+    if (messagesEl.children.length === 0) {
+      setTimeout(() => showNode('welcome'), 300);
+    }
+  }
+
+  function closeChat() {
+    isOpen = false;
+    wrap.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    bubble.setAttribute('aria-expanded', 'false');
+  }
+
+  bubble.addEventListener('click', () => isOpen ? closeChat() : openChat());
+  closeBtn.addEventListener('click', closeChat);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) closeChat();
+  });
+
+  function addBotMessage(html) {
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-msg-bot';
+
+    const av = document.createElement('div');
+    av.className = 'chat-msg-bot-avatar';
+    av.textContent = 'W';
+    av.setAttribute('aria-hidden', 'true');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bot-bubble';
+    bubble.innerHTML = html; // safe: all content is hardcoded in TREE
+
+    wrap.appendChild(av);
+    wrap.appendChild(bubble);
+    messagesEl.appendChild(wrap);
+    scrollBottom();
+  }
+
+  function addUserMessage(text) {
+    const el = document.createElement('div');
+    el.className = 'chat-msg-user';
+    el.textContent = text;
+    messagesEl.appendChild(el);
+    scrollBottom();
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'chat-typing';
+    el.id = 'chatTyping';
+
+    const av = document.createElement('div');
+    av.className = 'chat-msg-bot-avatar';
+    av.textContent = 'W';
+    av.setAttribute('aria-hidden', 'true');
+
+    const dots = document.createElement('div');
+    dots.className = 'chat-typing-dots';
+    dots.innerHTML = '<span></span><span></span><span></span>';
+
+    el.appendChild(av);
+    el.appendChild(dots);
+    messagesEl.appendChild(el);
+    scrollBottom();
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('chatTyping');
+    if (el) el.remove();
+  }
+
+  function renderReplies(replies) {
+    repliesEl.innerHTML = '';
+    replies.forEach(r => {
+      const btn = document.createElement('button');
+      btn.className = 'chat-reply-btn';
+      btn.textContent = r.label;
+      btn.addEventListener('click', () => handleReply(r));
+      repliesEl.appendChild(btn);
+    });
+  }
+
+  function handleReply(reply) {
+    addUserMessage(reply.label);
+    repliesEl.innerHTML = '';
+
+    // Acciones especiales
+    if (reply.action === 'whatsapp') {
+      window.open(WA_URL, '_blank', 'noopener,noreferrer');
+    }
+    if (reply.action === 'section' && reply.target) {
+      closeChat();
+      setTimeout(() => scrollToSection(reply.target), 300);
+    }
+
+    setTimeout(() => {
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        showNode(reply.next);
+      }, 700);
+    }, 200);
+  }
+
+  function showNode(nodeKey) {
+    const node = TREE[nodeKey];
+    if (!node) return;
+    addBotMessage(node.msg);
+    renderReplies(node.replies);
+  }
+
+  function scrollBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+}
 
 // ============================================
 // POPUP BIENVENIDA — 10% descuento
