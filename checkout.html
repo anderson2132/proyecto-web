@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Checkout — Wasi Tech</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    /* ── Checkout exclusivo ── */
+    body { background: #F4F8FF; }
+
+    .co-header {
+      background: #0A0A0A;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .co-back {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .co-back:hover { color: white; }
+
+    .co-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .co-step { color: rgba(255,255,255,0.25); }
+    .co-step.active { color: #4ECFCA; }
+    .co-step-sep { color: rgba(255,255,255,0.15); }
+
+    .co-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── Formulario ── */
+    .co-form-card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #E8E8E8;
+      overflow: hidden;
+    }
+
+    .co-section-title {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0066FF;
+      padding: 24px 28px 0;
+      margin-bottom: 20px;
+    }
+
+    .co-form { padding: 0 28px 28px; }
+
+    .co-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .co-row.full { grid-template-columns: 1fr; }
+
+    .co-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .co-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #555555;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .co-input {
+      height: 46px;
+      padding: 0 14px;
+      border: 1.5px solid #E8E8E8;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.875rem;
+      color: #111111;
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .co-input:focus {
+      border-color: #0066FF;
+      background: white;
+    }
+
+    .co-input.error { border-color: #AA2826; }
+
+    .co-select {
+      height: 46px;
+      padding: 0 14px;
+      border: 1.5px solid #E8E8E8;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.875rem;
+      color: #111111;
+      background: #FAFAFA;
+      outline: none;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .co-divider {
+      height: 1px;
+      background: #F0F0F0;
+      margin: 24px 0;
+    }
+
+    /* Métodos de pago */
+    .co-pay-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 28px 28px;
+    }
+
+    .co-pay-opt {
+      border: 1.5px solid #E8E8E8;
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.18s;
+      background: white;
+    }
+
+    .co-pay-opt:hover { border-color: #0066FF; }
+    .co-pay-opt.selected { border-color: #0066FF; background: #F4F8FF; }
+
+    .co-pay-opt input { accent-color: #0066FF; }
+
+    .co-pay-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #111111;
+    }
+
+    .co-pay-sub {
+      font-size: 0.68rem;
+      color: #999999;
+      font-weight: 500;
+    }
+
+    .co-pay-icon { font-size: 1.4rem; }
+
+    /* WhatsApp notice */
+    .co-wa-notice {
+      margin: 0 28px 28px;
+      background: #F0FFF4;
+      border: 1.5px solid #C6F6D5;
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: #276749;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .co-wa-notice i { color: #25D366; font-size: 1.1rem; margin-top: 1px; flex-shrink: 0; }
+
+    /* ── Resumen del pedido ── */
+    .co-summary {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #E8E8E8;
+      position: sticky;
+      top: 24px;
+    }
+
+    .co-summary-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #111111;
+      padding: 20px 24px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+
+    .co-items-list {
+      padding: 16px 24px;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .co-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F8F8F8;
+    }
+
+    .co-item:last-child { border-bottom: none; }
+
+    .co-item-emoji {
+      width: 42px;
+      height: 42px;
+      background: #F4F8FF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .co-item-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #111111;
+      flex: 1;
+      line-height: 1.3;
+    }
+
+    .co-item-qty {
+      font-size: 0.72rem;
+      color: #999999;
+      font-weight: 500;
+    }
+
+    .co-item-price {
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: #111111;
+      white-space: nowrap;
+    }
+
+    .co-totals {
+      padding: 16px 24px;
+      border-top: 1px solid #F0F0F0;
+    }
+
+    .co-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #666666;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .co-total-row.main {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #111111;
+      padding-top: 10px;
+      border-top: 1.5px solid #111111;
+      margin-top: 8px;
+    }
+
+    .co-shipping-free { color: #276749; font-weight: 700; }
+
+    .co-submit-btn {
+      width: calc(100% - 48px);
+      margin: 0 24px 24px;
+      height: 52px;
+      background: #0066FF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .co-submit-btn:hover { background: #0047CC; }
+    .co-submit-btn:disabled { background: #AAAAAA; cursor: not-allowed; }
+
+    .co-secure-note {
+      text-align: center;
+      font-size: 0.68rem;
+      color: #AAAAAA;
+      padding: 0 24px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* Pantalla de éxito */
+    .co-success {
+      display: none;
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    .co-success.show { display: block; }
+    .co-form-content.hide { display: none; }
+
+    .co-success-icon { font-size: 4rem; margin-bottom: 20px; }
+    .co-success-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #111111;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .co-success-desc { font-size: 0.9rem; color: #666666; line-height: 1.7; margin-bottom: 28px; }
+
+    .co-empty {
+      text-align: center;
+      padding: 80px 40px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .co-wrap { grid-template-columns: 1fr; }
+      .co-summary { position: static; order: -1; }
+    }
+
+    @media (max-width: 600px) {
+      .co-row { grid-template-columns: 1fr; }
+      .co-pay-methods { grid-template-columns: 1fr; }
+      .co-header { padding: 14px 16px; }
+      .co-steps { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="co-header">
+    <a href="index.html" class="co-back">
+      <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver a la tienda
+    </a>
+
+    <a href="index.html" class="logo-badge" aria-label="Wasi Tech">
+      <span class="lb-wasi">WASI</span>
+      <span class="lb-divider" aria-hidden="true"></span>
+      <span class="lb-right">
+        <span class="lb-tech">TECH</span>
+        <span class="lb-store">STORE</span>
+      </span>
+    </a>
+
+    <div class="co-steps" aria-label="Pasos del checkout">
+      <span class="co-step">Carrito</span>
+      <span class="co-step-sep">›</span>
+      <span class="co-step active">Datos</span>
+      <span class="co-step-sep">›</span>
+      <span class="co-step">Pago</span>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="co-wrap" id="coWrap">
+
+    <!-- Formulario -->
+    <div>
+      <div class="co-form-card" id="coFormCard">
+
+        <!-- Estado: carrito vacío -->
+        <div class="co-empty" id="coEmpty" style="display:none">
+          <p style="font-size:3rem; margin-bottom:16px">🛒</p>
+          <p style="font-weight:800; font-size:1.1rem; margin-bottom:8px">Tu carrito está vacío</p>
+          <p style="color:#666; margin-bottom:24px">Agrega productos antes de continuar al checkout.</p>
+          <a href="index.html#productos" class="btn btn-accent">Ver productos →</a>
+        </div>
+
+        <!-- Formulario principal -->
+        <div class="co-form-content" id="coFormContent">
+
+          <!-- Datos de contacto -->
+          <p class="co-section-title">
+            <i class="fas fa-user" aria-hidden="true" style="margin-right:6px"></i>
+            Datos de contacto
+          </p>
+          <form class="co-form" id="checkoutForm" novalidate>
+            <div class="co-row">
+              <div class="co-field">
+                <label class="co-label" for="coName">Nombre completo *</label>
+                <input class="co-input" type="text" id="coName" name="name" placeholder="Juan Pérez" required maxlength="100" autocomplete="name" />
+              </div>
+              <div class="co-field">
+                <label class="co-label" for="coEmail">Correo electrónico *</label>
+                <input class="co-input" type="email" id="coEmail" name="email" placeholder="juan@correo.com" required maxlength="254" autocomplete="email" />
+              </div>
+            </div>
+            <div class="co-row">
+              <div class="co-field">
+                <label class="co-label" for="coPhone">Teléfono / Celular *</label>
+                <input class="co-input" type="tel" id="coPhone" name="phone" placeholder="999 999 999" required maxlength="15" autocomplete="tel" />
+              </div>
+              <div class="co-field">
+                <label class="co-label" for="coDoc">DNI / RUC</label>
+                <input class="co-input" type="text" id="coDoc" name="doc" placeholder="12345678" maxlength="11" />
+              </div>
+            </div>
+
+            <div class="co-divider"></div>
+
+            <!-- Dirección de envío -->
+            <p class="co-section-title" style="padding-top:0">
+              <i class="fas fa-map-marker-alt" aria-hidden="true" style="margin-right:6px"></i>
+              Dirección de envío
+            </p>
+            <div class="co-row full">
+              <div class="co-field">
+                <label class="co-label" for="coAddress">Dirección *</label>
+                <input class="co-input" type="text" id="coAddress" name="address" placeholder="Av. Javier Prado 123, Dpto 4B" required maxlength="200" autocomplete="street-address" />
+              </div>
+            </div>
+            <div class="co-row">
+              <div class="co-field">
+                <label class="co-label" for="coDistrict">Distrito *</label>
+                <input class="co-input" type="text" id="coDistrict" name="district" placeholder="Miraflores" required maxlength="80" />
+              </div>
+              <div class="co-field">
+                <label class="co-label" for="coDept">Departamento *</label>
+                <select class="co-select" id="coDept" name="dept" required>
+                  <option value="">Seleccionar...</option>
+                  <option value="Lima" selected>Lima</option>
+                  <option value="Arequipa">Arequipa</option>
+                  <option value="Cusco">Cusco</option>
+                  <option value="La Libertad">La Libertad</option>
+                  <option value="Piura">Piura</option>
+                  <option value="Lambayeque">Lambayeque</option>
+                  <option value="Junín">Junín</option>
+                  <option value="Ica">Ica</option>
+                  <option value="Ancash">Ancash</option>
+                  <option value="Loreto">Loreto</option>
+                  <option value="Otro">Otro departamento</option>
+                </select>
+              </div>
+            </div>
+            <div class="co-row full">
+              <div class="co-field">
+                <label class="co-label" for="coNotes">Notas adicionales</label>
+                <input class="co-input" type="text" id="coNotes" name="notes" placeholder="Referencias, piso, horario preferido..." maxlength="300" />
+              </div>
+            </div>
+
+            <p id="coFormError" role="alert" style="color:#AA2826; font-size:0.78rem; font-weight:600; margin-top:8px; min-height:18px;"></p>
+          </form>
+
+          <!-- Métodos de pago -->
+          <p class="co-section-title" style="border-top:1px solid #F0F0F0; padding-top:24px">
+            <i class="fas fa-credit-card" aria-hidden="true" style="margin-right:6px"></i>
+            Método de pago
+          </p>
+          <div class="co-pay-methods" role="radiogroup" aria-label="Método de pago">
+
+            <label class="co-pay-opt selected" id="payOptWA">
+              <input type="radio" name="payMethod" value="whatsapp" checked />
+              <span class="co-pay-icon">💬</span>
+              <span>
+                <div class="co-pay-label">WhatsApp</div>
+                <div class="co-pay-sub">Coordina el pago</div>
+              </span>
+            </label>
+
+            <label class="co-pay-opt" id="payOptYape">
+              <input type="radio" name="payMethod" value="yape" />
+              <span class="co-pay-icon">💜</span>
+              <span>
+                <div class="co-pay-label">Yape / Plin</div>
+                <div class="co-pay-sub">Transferencia al número</div>
+              </span>
+            </label>
+
+            <label class="co-pay-opt" id="payOptCard">
+              <input type="radio" name="payMethod" value="card" disabled title="Próximamente" />
+              <span class="co-pay-icon">💳</span>
+              <span>
+                <div class="co-pay-label" style="color:#AAAAAA">Tarjeta</div>
+                <div class="co-pay-sub">Próximamente</div>
+              </span>
+            </label>
+
+            <label class="co-pay-opt" id="payOptTransfer">
+              <input type="radio" name="payMethod" value="transfer" />
+              <span class="co-pay-icon">🏦</span>
+              <span>
+                <div class="co-pay-label">Transferencia</div>
+                <div class="co-pay-sub">BCP / Interbank</div>
+              </span>
+            </label>
+
+          </div>
+
+          <!-- Aviso WhatsApp -->
+          <div class="co-wa-notice">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            <span>Recibirás un mensaje de WhatsApp confirmando tu pedido y con las instrucciones de pago. Respuesta en menos de 10 minutos.</span>
+          </div>
+
+        </div>
+        <!-- fin co-form-content -->
+
+        <!-- Pantalla de éxito -->
+        <div class="co-success" id="coSuccess">
+          <div class="co-success-icon">🎉</div>
+          <h2 class="co-success-title">¡Pedido recibido!</h2>
+          <p class="co-success-desc">
+            Gracias por tu compra. Te escribiremos por WhatsApp en los próximos minutos para confirmar tu pedido y coordinar el pago.
+          </p>
+          <a href="https://wa.me/51994932902?text=Hola%2C%20acabo%20de%20hacer%20un%20pedido%20en%20Wasi%20Tech"
+             class="btn btn-accent"
+             target="_blank"
+             rel="noopener noreferrer"
+             style="margin-bottom:16px; display:inline-block">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i> Hablar con un asesor
+          </a>
+          <br>
+          <a href="index.html" style="color:#666; font-size:0.82rem; font-weight:600;">← Volver a la tienda</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <div>
+      <div class="co-summary">
+        <div class="co-summary-title">
+          <i class="fas fa-shopping-bag" aria-hidden="true" style="margin-right:6px; color:#0066FF"></i>
+          Resumen del pedido
+        </div>
+
+        <div class="co-items-list" id="coItemsList">
+          <!-- Se llena con JS -->
+        </div>
+
+        <div class="co-totals">
+          <div class="co-total-row">
+            <span>Subtotal</span>
+            <span id="coSubtotal">S/ 0.00</span>
+          </div>
+          <div class="co-total-row">
+            <span>Envío</span>
+            <span id="coShipping" class="co-shipping-free">Gratis</span>
+          </div>
+          <div class="co-total-row main">
+            <span>Total</span>
+            <span id="coTotal">S/ 0.00</span>
+          </div>
+        </div>
+
+        <button class="co-submit-btn" id="coSubmitBtn" type="button">
+          <i class="fas fa-lock" aria-hidden="true"></i>
+          Confirmar pedido
+        </button>
+
+        <p class="co-secure-note">
+          <i class="fas fa-shield-alt" aria-hidden="true"></i>
+          Pago 100% seguro · Tu info está protegida
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <!-- fin co-wrap -->
+
+  <script>
+  'use strict';
+
+  (function() {
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // ── Leer carrito desde localStorage ─────────
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('wasitech_cart') || '[]'); } catch(e) { return []; }
+    }
+
+    // ── Catálogo mínimo para mostrar nombres ────
+    const CATALOG = {
+      1:  { nombre: 'Soporte Monitor Elevador Bambú',  emoji: '🖥️',  precio: 89.90  },
+      2:  { nombre: 'Brazo Articulado Monitor Dual',   emoji: '🖥️',  precio: 149.90 },
+      3:  { nombre: 'Soporte Laptop Plegable Aluminio',emoji: '💻',  precio: 69.90  },
+      4:  { nombre: 'Soporte Teléfono Escritorio',     emoji: '📱',  precio: 34.90  },
+      5:  { nombre: 'Soporte Documentos Vertical',     emoji: '📄',  precio: 44.90  },
+      6:  { nombre: 'Reposamuñecas Gel Premium',       emoji: '⌨️',  precio: 39.90  },
+      7:  { nombre: 'Lámpara Escritorio LED Pro',      emoji: '💡',  precio: 89.90  },
+      8:  { nombre: 'Lámpara Clip Monitor LumEco',     emoji: '💡',  precio: 79.90  },
+      9:  { nombre: 'Ring Light 10" Trípode',          emoji: '💡',  precio: 119.90 },
+      10: { nombre: 'Tira LED USB Escritorio',         emoji: '✨',  precio: 29.90  },
+      11: { nombre: 'Teclado Mecánico KeyFlow 75%',    emoji: '⌨️',  precio: 279.90 },
+      12: { nombre: 'Ratón Ergonómico Vertical',       emoji: '🖱️',  precio: 89.90  },
+      13: { nombre: 'Webcam Full HD 1080p',            emoji: '📷',  precio: 129.90 },
+      14: { nombre: 'Auriculares Noise Cancelling',    emoji: '🎧',  precio: 199.90 },
+      15: { nombre: 'Desk Pad XL 90x40cm',             emoji: '🗒️',  precio: 59.90  },
+      16: { nombre: 'Hub USB-C 7 en 1',               emoji: '🔌',  precio: 89.90  },
+      17: { nombre: 'Organizador Cables Velcro',       emoji: '🗂️',  precio: 24.90  },
+      18: { nombre: 'Cargador Inalámbrico 15W',        emoji: '⚡',  precio: 69.90  },
+      19: { nombre: 'Porta Auriculares Aluminio',      emoji: '🎧',  precio: 44.90  },
+      20: { nombre: 'Bandeja Cajón Escritorio',        emoji: '🗄️',  precio: 54.90  },
+    };
+
+    const cart = getCart();
+    const empty  = document.getElementById('coEmpty');
+    const formContent = document.getElementById('coFormContent');
+
+    // ── Carrito vacío ────────────────────────────
+    if (!cart.length) {
+      if (empty) empty.style.display = 'block';
+      if (formContent) formContent.style.display = 'none';
+      document.getElementById('coSubmitBtn').disabled = true;
+      return;
+    }
+
+    // ── Renderizar items ─────────────────────────
+    const listEl   = document.getElementById('coItemsList');
+    const subEl    = document.getElementById('coSubtotal');
+    const shipEl   = document.getElementById('coShipping');
+    const totalEl  = document.getElementById('coTotal');
+
+    let subtotal = 0;
+
+    cart.forEach(function(item) {
+      const prod = CATALOG[item.id];
+      if (!prod) return;
+      const lineTotal = prod.precio * item.qty;
+      subtotal += lineTotal;
+
+      const div = document.createElement('div');
+      div.className = 'co-item';
+
+      const emojiEl = document.createElement('div');
+      emojiEl.className = 'co-item-emoji';
+      emojiEl.textContent = prod.emoji;
+
+      const infoEl = document.createElement('div');
+      infoEl.style.flex = '1';
+      infoEl.style.minWidth = '0';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'co-item-name';
+      nameEl.textContent = prod.nombre;
+
+      const qtyEl = document.createElement('div');
+      qtyEl.className = 'co-item-qty';
+      qtyEl.textContent = 'Cant: ' + item.qty;
+
+      infoEl.appendChild(nameEl);
+      infoEl.appendChild(qtyEl);
+
+      const priceEl = document.createElement('div');
+      priceEl.className = 'co-item-price';
+      priceEl.textContent = 'S/ ' + lineTotal.toFixed(2);
+
+      div.appendChild(emojiEl);
+      div.appendChild(infoEl);
+      div.appendChild(priceEl);
+      listEl.appendChild(div);
+    });
+
+    const shipping = subtotal >= 150 ? 0 : 15;
+    const total = subtotal + shipping;
+
+    subEl.textContent  = 'S/ ' + subtotal.toFixed(2);
+    shipEl.textContent = shipping === 0 ? 'GRATIS' : 'S/ ' + shipping.toFixed(2);
+    totalEl.textContent = 'S/ ' + total.toFixed(2);
+
+    // ── Selección método de pago ─────────────────
+    document.querySelectorAll('.co-pay-opt').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('.co-pay-opt').forEach(function(o) { o.classList.remove('selected'); });
+        opt.classList.add('selected');
+      });
+    });
+
+    // ── Validar y enviar formulario ──────────────
+    document.getElementById('coSubmitBtn').addEventListener('click', function() {
+      const name     = document.getElementById('coName').value.trim();
+      const email    = document.getElementById('coEmail').value.trim();
+      const phone    = document.getElementById('coPhone').value.trim();
+      const address  = document.getElementById('coAddress').value.trim();
+      const district = document.getElementById('coDistrict').value.trim();
+      const dept     = document.getElementById('coDept').value;
+      const errorEl  = document.getElementById('coFormError');
+      const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value;
+
+      errorEl.textContent = '';
+
+      if (!name)                        { errorEl.textContent = 'Ingresa tu nombre completo.'; document.getElementById('coName').focus(); return; }
+      if (!EMAIL_RE.test(email))        { errorEl.textContent = 'Ingresa un correo válido.'; document.getElementById('coEmail').focus(); return; }
+      if (phone.length < 7)             { errorEl.textContent = 'Ingresa un teléfono válido.'; document.getElementById('coPhone').focus(); return; }
+      if (!address)                     { errorEl.textContent = 'Ingresa tu dirección de envío.'; document.getElementById('coAddress').focus(); return; }
+      if (!district)                    { errorEl.textContent = 'Ingresa tu distrito.'; document.getElementById('coDistrict').focus(); return; }
+      if (!dept)                        { errorEl.textContent = 'Selecciona tu departamento.'; document.getElementById('coDept').focus(); return; }
+
+      const btn = document.getElementById('coSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+
+      // Preparar datos del pedido
+      const orderData = {
+        customer: { name, email, phone, address, district, dept, doc: document.getElementById('coDoc').value.trim(), notes: document.getElementById('coNotes').value.trim() },
+        items: cart,
+        subtotal: subtotal,
+        shipping: shipping,
+        total: total,
+        payMethod: payMethod,
+        created_at: new Date().toISOString()
+      };
+
+      // ── Enviar a Netlify Function ─────────────────
+      fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          // Limpiar carrito
+          localStorage.removeItem('wasitech_cart');
+          // Mostrar éxito
+          document.getElementById('coFormContent').classList.add('hide');
+          document.getElementById('coSuccess').classList.add('show');
+          // Scroll arriba
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          throw new Error(data.error || 'Error al procesar pedido');
+        }
+      })
+      .catch(function() {
+        // Si Netlify Functions no está aún, redirigir a WhatsApp
+        const waMsg = encodeURIComponent(
+          `Hola Wasi Tech, quiero hacer un pedido:\n\n` +
+          `👤 ${name}\n📧 ${email}\n📱 ${phone}\n📍 ${address}, ${district}, ${dept}\n\n` +
+          `🛒 Productos: ${cart.map(function(i){ const p=CATALOG[i.id]; return p ? p.nombre+' x'+i.qty : ''; }).join(', ')}\n` +
+          `💰 Total: S/ ${total.toFixed(2)}`
+        );
+        window.open('https://wa.me/51994932902?text=' + waMsg, '_blank');
+
+        // También mostrar éxito
+        localStorage.removeItem('wasitech_cart');
+        document.getElementById('coFormContent').classList.add('hide');
+        document.getElementById('coSuccess').classList.add('show');
+      })
+      .finally(function() {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock"></i> Confirmar pedido';
+      });
+    });
+
+  })();
+  </script>
+
+</body>
+</html>

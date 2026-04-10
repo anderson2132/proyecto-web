@@ -573,7 +573,7 @@ const initCartDrawer = () => {
     if (cart.length === 0) {
       showToast('Tu carrito está vacío');
     } else {
-      showToast('Redirigiendo al pago…');
+      window.location.href = 'checkout.html';
     }
   });
 };
