@@ -12,14 +12,14 @@
   <title>WASI TECH — Home Office Profesional en Perú</title>
   <meta name="description" content="Wasi Tech: mejora tu productividad con soportes ergonómicos, iluminación LED y tecnología minimalista. Trabaja mejor desde casa. Envío gratis desde S/ 150." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://qoriwasi.com/" />
+  <link rel="canonical" href="https://wasitech.pe/" />
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://qoriwasi.com/" />
+  <meta property="og:url"         content="https://wasitech.pe/" />
   <meta property="og:title"       content="WASI TECH — Home Office Profesional" />
   <meta property="og:description" content="Soportes ergonómicos, lámparas LED y tecnología minimalista para tu home office. Marca peruana, envío en 24h Lima." />
-  <meta property="og:image"       content="https://qoriwasi.com/img/og-cover.jpg" />
+  <meta property="og:image"       content="https://wasitech.pe/img/og-cover.jpg" />
   <meta property="og:locale"      content="es_PE" />
   <meta property="og:site_name"   content="Wasi Tech" />
 
@@ -28,7 +28,7 @@
   <meta name="twitter:site"        content="@wasitech" />
   <meta name="twitter:title"       content="WASI TECH — Home Office Profesional" />
   <meta name="twitter:description" content="Soportes ergonómicos, lámparas LED y tech minimalista para tu home office ideal. Marca peruana premium." />
-  <meta name="twitter:image"       content="https://qoriwasi.com/img/og-cover.jpg" />
+  <meta name="twitter:image"       content="https://wasitech.pe/img/og-cover.jpg" />
 
   <!-- JSON-LD: Organización -->
   <script type="application/ld+json">
@@ -36,8 +36,8 @@
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Wasi Tech",
-    "url": "https://qoriwasi.com",
-    "logo": "https://qoriwasi.com/img/logo.png",
+    "url": "https://wasitech.pe",
+    "logo": "https://wasitech.pe/img/logo.png",
     "description": "Wasi Tech — Ergonomía y tecnología minimalista para mejorar tu productividad en home office.",
     "address": {
       "@type": "PostalAddress",
@@ -107,30 +107,30 @@
         </div>
       </div>
       <div class="nav-item">
-        <a href="#iluminacion" class="nav-link">Iluminación</a>
+        <a href="#productos" data-switch-tab="tabIluminacion" class="nav-link">Iluminación</a>
         <div class="nav-dropdown">
-          <a href="#iluminacion">Lámparas LED Escritorio</a>
-          <a href="#iluminacion">Clip Monitor</a>
-          <a href="#iluminacion">Ring Lights</a>
-          <a href="#iluminacion">Luz Solar</a>
+          <a href="#productos" data-switch-tab="tabIluminacion">Lámparas LED Escritorio</a>
+          <a href="#productos" data-switch-tab="tabIluminacion">Clip Monitor</a>
+          <a href="#productos" data-switch-tab="tabIluminacion">Ring Lights</a>
+          <a href="#productos" data-switch-tab="tabIluminacion">Luz Solar</a>
         </div>
       </div>
       <div class="nav-item">
-        <a href="#perifericos" class="nav-link">Periféricos</a>
+        <a href="#productos" data-switch-tab="tabPerifericos" class="nav-link">Periféricos</a>
         <div class="nav-dropdown">
-          <a href="#perifericos">Teclados Mecánicos</a>
-          <a href="#perifericos">Ratones Ergonómicos</a>
-          <a href="#perifericos">Webcams</a>
-          <a href="#perifericos">Auriculares</a>
+          <a href="#productos" data-switch-tab="tabPerifericos">Teclados Mecánicos</a>
+          <a href="#productos" data-switch-tab="tabPerifericos">Ratones Ergonómicos</a>
+          <a href="#productos" data-switch-tab="tabPerifericos">Webcams</a>
+          <a href="#productos" data-switch-tab="tabPerifericos">Auriculares</a>
         </div>
       </div>
       <div class="nav-item">
-        <a href="#organizacion" class="nav-link">Organización</a>
+        <a href="#productos" data-switch-tab="tabOrganizacion" class="nav-link">Organización</a>
         <div class="nav-dropdown">
-          <a href="#organizacion">Desk Pads</a>
-          <a href="#organizacion">Hubs USB-C</a>
-          <a href="#organizacion">Gestión de Cables</a>
-          <a href="#organizacion">Cargadores</a>
+          <a href="#productos" data-switch-tab="tabOrganizacion">Desk Pads</a>
+          <a href="#productos" data-switch-tab="tabOrganizacion">Hubs USB-C</a>
+          <a href="#productos" data-switch-tab="tabOrganizacion">Gestión de Cables</a>
+          <a href="#productos" data-switch-tab="tabOrganizacion">Cargadores</a>
         </div>
       </div>
       <a href="#ofertas" class="nav-link" style="color:var(--accent); font-weight:800">Ofertas</a>
@@ -195,13 +195,13 @@
       <button class="mobile-cat-btn" data-section="soportes" data-close-menu>
         <span aria-hidden="true">🖥️</span> Soportes &amp; Stands
       </button>
-      <button class="mobile-cat-btn" data-section="iluminacion" data-close-menu>
+      <button class="mobile-cat-btn" data-switch-tab="tabIluminacion" data-close-menu>
         <span aria-hidden="true">💡</span> Iluminación LED
       </button>
-      <button class="mobile-cat-btn" data-section="perifericos" data-close-menu>
+      <button class="mobile-cat-btn" data-switch-tab="tabPerifericos" data-close-menu>
         <span aria-hidden="true">⌨️</span> Periféricos
       </button>
-      <button class="mobile-cat-btn" data-section="organizacion" data-close-menu>
+      <button class="mobile-cat-btn" data-switch-tab="tabOrganizacion" data-close-menu>
         <span aria-hidden="true">🗒️</span> Organización Tech
       </button>
     </div>
@@ -377,22 +377,22 @@
       </div>
     </div>
     <div class="categories-grid">
-      <button class="category-card" type="button" aria-label="Ver soportes y stands, 6 productos" data-section="soportes">
+      <button class="category-card" type="button" aria-label="Ver soportes y stands, 6 productos" data-switch-tab="tabSoportes">
         <span class="cat-emoji" role="img" aria-hidden="true">🖥️</span>
         <div class="cat-name">Soportes &amp; Stands</div>
         <div class="cat-count">6 productos</div>
       </button>
-      <button class="category-card" type="button" aria-label="Ver iluminación LED, 4 productos" data-section="iluminacion">
+      <button class="category-card" type="button" aria-label="Ver iluminación LED, 4 productos" data-switch-tab="tabIluminacion">
         <span class="cat-emoji" role="img" aria-hidden="true">💡</span>
         <div class="cat-name">Iluminación LED</div>
         <div class="cat-count">4 productos</div>
       </button>
-      <button class="category-card" type="button" aria-label="Ver periféricos, 4 productos" data-section="perifericos">
+      <button class="category-card" type="button" aria-label="Ver periféricos, 4 productos" data-switch-tab="tabPerifericos">
         <span class="cat-emoji" role="img" aria-hidden="true">⌨️</span>
         <div class="cat-name">Periféricos</div>
         <div class="cat-count">4 productos</div>
       </button>
-      <button class="category-card" type="button" aria-label="Ver organización tech, 6 productos" data-section="organizacion">
+      <button class="category-card" type="button" aria-label="Ver organización tech, 6 productos" data-switch-tab="tabOrganizacion">
         <span class="cat-emoji" role="img" aria-hidden="true">🗒️</span>
         <div class="cat-name">Organización Tech</div>
         <div class="cat-count">6 productos</div>
@@ -411,7 +411,7 @@
         <div class="section-eyebrow">Productos</div>
         <h2 class="section-title">Todo para tu <span>home office</span></h2>
       </div>
-      <a href="#tabAll" class="btn btn-outline btn-sm">Ver todos →</a>
+      <a href="#productos" data-switch-tab="tabAll" class="btn btn-outline btn-sm">Ver todos →</a>
     </div>
 
     <div data-tab-group>
@@ -513,7 +513,7 @@
               <span class="cd-lbl">Seg</span>
             </div>
           </div>
-          <a href="#perifericos" class="btn btn-accent btn-sm">Ver ofertas →</a>
+          <a href="#productos" data-switch-tab="tabPerifericos" class="btn btn-accent btn-sm">Ver ofertas →</a>
         </div>
         <span class="promo-bg-icon">⌨️</span>
       </div>
