@@ -28,10 +28,12 @@ const getUser = async () => {
 // LOGIN CON PROVEEDOR SOCIAL
 // ============================================
 const loginWith = async (provider) => {
+  // Construir URL base correcta (funciona en GitHub Pages /proyecto-web/ y en local)
+  const base = window.location.href.replace(/\/[^/]*$/, '/');
   const { error } = await _supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: window.location.origin + '/cuenta.html'
+      redirectTo: base + 'cuenta.html'
     }
   });
   if (error) {
