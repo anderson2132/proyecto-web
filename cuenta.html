@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi cuenta — WASI TECH</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    body { background: var(--bg-soft); min-height: 100vh; }
+
+    /* ── Header ── */
+    .cuenta-header {
+      background: #fff;
+      border-bottom: 1px solid #F0F0F0;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2B2B2B;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    .lb-wasi   { color:#fff; font-weight:900; font-size:1.1rem; letter-spacing:0.04em; }
+    .lb-divider{ width:1.5px; height:20px; background:#4ECFCA; margin:0 6px; }
+    .lb-right  { display:flex; flex-direction:column; line-height:1.1; }
+    .lb-tech   { color:#4ECFCA; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; }
+    .lb-store  { color:rgba(78,207,202,0.65); font-size:0.5rem; font-weight:600; letter-spacing:0.15em; }
+
+    /* ── Layout ── */
+    .cuenta-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 700px) {
+      .cuenta-wrap { grid-template-columns: 1fr; }
+      .cuenta-header { padding: 14px 20px; }
+    }
+
+    /* ── Sidebar ── */
+    .cuenta-sidebar {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    }
+    .cuenta-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg-soft);
+    }
+    .cuenta-avatar-placeholder {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .cuenta-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-top: 12px;
+    }
+    .cuenta-email {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-top: 2px;
+      word-break: break-all;
+    }
+    .cuenta-provider {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      background: var(--bg-soft);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+    .cuenta-nav {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cuenta-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: var(--text-soft);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .cuenta-nav-item:hover { background: var(--bg-soft); color: var(--dark); }
+    .cuenta-nav-item.active { background: var(--bg-soft); color: var(--accent); font-weight: 700; }
+    .cuenta-nav-item i { width: 18px; text-align: center; }
+
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      background: none;
+      color: #E53E3E;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+    .btn-logout:hover { background: #FFF5F5; }
+
+    /* ── Contenido ── */
+    .cuenta-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .cuenta-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    }
+    .cuenta-card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cuenta-card-title i { color: var(--accent); }
+
+    /* Stats */
+    .cuenta-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 500px) { .cuenta-stats { grid-template-columns: 1fr 1fr; } }
+    .cuenta-stat {
+      background: var(--bg-soft);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .cuenta-stat-num  { font-size: 1.6rem; font-weight: 900; color: var(--dark); }
+    .cuenta-stat-lbl  { font-size: 0.75rem; color: var(--text-soft); margin-top: 4px; }
+
+    /* Pedidos vacíos */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-soft);
+    }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.3; }
+    .empty-state p { font-size: 0.9rem; }
+    .empty-state a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+    /* Info personal */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 500px) { .info-grid { grid-template-columns: 1fr; } }
+    .info-field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .info-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .info-field input:focus { border-color: var(--accent); }
+    .info-field input:disabled { background: var(--bg-soft); color: var(--text-soft); cursor: not-allowed; }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="cuenta-header">
+  <a href="index.html" class="logo-badge" aria-label="Wasi Tech — Inicio">
+    <span class="lb-wasi">WASI</span>
+    <span class="lb-divider" aria-hidden="true"></span>
+    <span class="lb-right">
+      <span class="lb-tech">TECH</span>
+      <span class="lb-store">STORE</span>
+    </span>
+  </a>
+  <a href="index.html" style="font-size:0.85rem; color:var(--text-soft); text-decoration:none; display:flex; align-items:center; gap:6px;">
+    <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver a la tienda
+  </a>
+</header>
+
+<!-- Contenido principal -->
+<div class="cuenta-wrap">
+
+  <!-- Sidebar -->
+  <aside class="cuenta-sidebar">
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+      <div id="userAvatar" class="cuenta-avatar-placeholder skeleton" style="min-width:72px;"></div>
+      <div class="cuenta-name"  id="userName"  style="min-width:120px; min-height:16px;" >&nbsp;</div>
+      <div class="cuenta-email" id="userEmail" style="min-width:160px; min-height:12px;">&nbsp;</div>
+      <div class="cuenta-provider" id="userProvider" style="visibility:hidden;">
+        <i class="fas fa-circle-check"></i> <span></span>
+      </div>
+    </div>
+
+    <nav class="cuenta-nav" aria-label="Navegación de cuenta">
+      <button class="cuenta-nav-item active" data-section="resumen">
+        <i class="fas fa-home" aria-hidden="true"></i> Resumen
+      </button>
+      <button class="cuenta-nav-item" data-section="pedidos">
+        <i class="fas fa-box" aria-hidden="true"></i> Mis pedidos
+      </button>
+      <button class="cuenta-nav-item" data-section="favoritos">
+        <i class="far fa-heart" aria-hidden="true"></i> Favoritos
+      </button>
+      <button class="cuenta-nav-item" data-section="datos">
+        <i class="far fa-user" aria-hidden="true"></i> Mis datos
+      </button>
+    </nav>
+
+    <hr style="border:none; border-top:1px solid #F0F0F0; margin:16px 0;" />
+    <button class="btn-logout" id="logoutBtn">
+      <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Cerrar sesión
+    </button>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="cuenta-content" id="cuentaContent">
+
+    <!-- Resumen -->
+    <div class="cuenta-card">
+      <div class="cuenta-card-title"><i class="fas fa-chart-bar"></i> Resumen</div>
+      <div class="cuenta-stats">
+        <div class="cuenta-stat">
+          <div class="cuenta-stat-num" id="statPedidos">0</div>
+          <div class="cuenta-stat-lbl">Pedidos realizados</div>
+        </div>
+        <div class="cuenta-stat">
+          <div class="cuenta-stat-num" id="statFavoritos">0</div>
+          <div class="cuenta-stat-lbl">Favoritos guardados</div>
+        </div>
+        <div class="cuenta-stat">
+          <div class="cuenta-stat-num">S/ 0</div>
+          <div class="cuenta-stat-lbl">Total en compras</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pedidos recientes -->
+    <div class="cuenta-card">
+      <div class="cuenta-card-title"><i class="fas fa-box"></i> Pedidos recientes</div>
+      <div class="empty-state">
+        <i class="fas fa-box-open" style="display:block;"></i>
+        <p>Aún no tienes pedidos.<br><a href="index.html">Explorar productos →</a></p>
+      </div>
+    </div>
+
+    <!-- Favoritos -->
+    <div class="cuenta-card">
+      <div class="cuenta-card-title"><i class="far fa-heart"></i> Favoritos guardados</div>
+      <div id="favoritosGrid" class="products-grid" style="min-height:60px;">
+        <div class="empty-state">
+          <i class="far fa-heart" style="display:block;"></i>
+          <p>No tienes productos guardados.<br><a href="index.html">Descubrir productos →</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos personales -->
+    <div class="cuenta-card">
+      <div class="cuenta-card-title"><i class="far fa-user"></i> Mis datos</div>
+      <div class="info-grid">
+        <div class="info-field">
+          <label for="infoName">Nombre completo</label>
+          <input type="text" id="infoName" placeholder="Tu nombre" />
+        </div>
+        <div class="info-field">
+          <label for="infoEmail">Correo electrónico</label>
+          <input type="email" id="infoEmail" disabled placeholder="tu@correo.com" />
+        </div>
+        <div class="info-field">
+          <label for="infoPhone">Teléfono / WhatsApp</label>
+          <input type="tel" id="infoPhone" placeholder="9XXXXXXXX" />
+        </div>
+        <div class="info-field">
+          <label for="infoDNI">DNI</label>
+          <input type="text" id="infoDNI" placeholder="XXXXXXXX" maxlength="8" />
+        </div>
+        <div class="info-field" style="grid-column: 1 / -1;">
+          <label for="infoAddress">Dirección de entrega</label>
+          <input type="text" id="infoAddress" placeholder="Calle, número, distrito" />
+        </div>
+      </div>
+      <button class="btn btn-accent" style="margin-top:20px; width:100%;" id="saveInfoBtn">
+        Guardar cambios
+      </button>
+      <p id="saveMsg" style="display:none; text-align:center; color:#48BB78; font-size:0.85rem; margin-top:10px; font-weight:600;">
+        ✓ Datos guardados correctamente
+      </p>
+    </div>
+
+  </main>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+
+  // 1. Verificar sesión — redirigir si no está logueado
+  const user = await requireAuth();
+  if (!user) return;
+
+  // 2. Poblar datos del usuario
+  const name     = user.user_metadata?.full_name || user.email.split('@')[0];
+  const photo    = user.user_metadata?.avatar_url;
+  const provider = user.app_metadata?.provider || 'email';
+
+  // Avatar
+  const avatarEl = document.getElementById('userAvatar');
+  avatarEl.classList.remove('skeleton');
+  if (photo) {
+    avatarEl.outerHTML = `<img src="${photo}" alt="${name}" class="cuenta-avatar" id="userAvatar" />`;
+  } else {
+    avatarEl.textContent = name.charAt(0).toUpperCase();
+  }
+
+  document.getElementById('userName').textContent  = name;
+  document.getElementById('userEmail').textContent = user.email;
+
+  // Proveedor
+  const providerEl   = document.getElementById('userProvider');
+  const providerIcons = { google: '🔵 Google', facebook: '🔷 Facebook', azure: '🟦 Microsoft' };
+  providerEl.querySelector('span').textContent = providerIcons[provider] || provider;
+  providerEl.style.visibility = 'visible';
+
+  // 3. Poblar formulario de datos
+  document.getElementById('infoName').value    = name;
+  document.getElementById('infoEmail').value   = user.email;
+
+  // Recuperar datos guardados en localStorage (temporal hasta integrar Supabase DB)
+  const saved = JSON.parse(localStorage.getItem('wasitech_userdata') || '{}');
+  if (saved.phone)   document.getElementById('infoPhone').value   = saved.phone;
+  if (saved.dni)     document.getElementById('infoDNI').value     = saved.dni;
+  if (saved.address) document.getElementById('infoAddress').value = saved.address;
+
+  // 4. Favoritos desde localStorage
+  const wish = JSON.parse(localStorage.getItem('wasitech_wish') || '[]');
+  document.getElementById('statFavoritos').textContent = wish.length;
+
+  // 5. Guardar datos personales
+  document.getElementById('saveInfoBtn').addEventListener('click', () => {
+    const data = {
+      phone:   document.getElementById('infoPhone').value.trim(),
+      dni:     document.getElementById('infoDNI').value.trim(),
+      address: document.getElementById('infoAddress').value.trim()
+    };
+    localStorage.setItem('wasitech_userdata', JSON.stringify(data));
+    const msg = document.getElementById('saveMsg');
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 3000);
+  });
+
+  // 6. Cerrar sesión
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    if (confirm('¿Cerrar sesión?')) await logout();
+  });
+
+  // 7. Navegación del sidebar
+  document.querySelectorAll('[data-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-section]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión — WASI TECH</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    body { background: var(--bg-soft); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+    }
+
+    .login-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2B2B2B;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .login-logo .lb-wasi  { color:#fff; font-weight:900; font-size:1.1rem; letter-spacing:0.04em; }
+    .login-logo .lb-divider { width:1.5px; height:20px; background:#4ECFCA; margin:0 6px; }
+    .login-logo .lb-right  { display:flex; flex-direction:column; line-height:1.1; }
+    .login-logo .lb-tech   { color:#4ECFCA; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; }
+    .login-logo .lb-store  { color:rgba(78,207,202,0.65); font-size:0.5rem; font-weight:600; letter-spacing:0.15em; }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .login-sub {
+      color: var(--text-soft);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1.5px solid #E5E7EB;
+      background: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      margin-bottom: 12px;
+      text-decoration: none;
+    }
+    .social-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 12px rgba(0,102,255,0.1);
+      background: var(--bg-soft);
+    }
+    .social-btn img { width: 22px; height: 22px; }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: var(--text-soft);
+      font-size: 0.82rem;
+    }
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #E5E7EB;
+    }
+
+    .login-terms {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 24px;
+      line-height: 1.6;
+    }
+    .login-terms a { color: var(--accent); text-decoration: none; }
+
+    .login-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      text-decoration: none;
+      margin-top: 20px;
+      transition: color 0.2s;
+    }
+    .login-back:hover { color: var(--dark); }
+
+    .login-loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 0;
+    }
+    .login-loading.show { display: flex; }
+    .login-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--bg-soft);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header mínimo -->
+<header style="background:#fff; border-bottom:1px solid #F0F0F0; padding:16px 24px;">
+  <a href="index.html" class="login-logo" aria-label="Wasi Tech — Inicio">
+    <span class="lb-wasi">WASI</span>
+    <span class="lb-divider" aria-hidden="true"></span>
+    <span class="lb-right">
+      <span class="lb-tech">TECH</span>
+      <span class="lb-store">STORE</span>
+    </span>
+  </a>
+</header>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <!-- Loading state -->
+    <div class="login-loading" id="loginLoading">
+      <div class="login-spinner"></div>
+      <p style="color:var(--text-soft); font-size:0.9rem;">Conectando…</p>
+    </div>
+
+    <!-- Login form -->
+    <div id="loginForm">
+      <h1 class="login-title">Bienvenido a Wasi Tech</h1>
+      <p class="login-sub">Inicia sesión para ver tus pedidos, favoritos y más.</p>
+
+      <!-- Google -->
+      <button class="social-btn" onclick="handleLogin('google')">
+        <img src="https://www.google.com/favicon.ico" alt="Google" />
+        Continuar con Google
+      </button>
+
+      <!-- Microsoft / Outlook -->
+      <button class="social-btn" onclick="handleLogin('azure')">
+        <img src="https://www.microsoft.com/favicon.ico" alt="Microsoft" />
+        Continuar con Microsoft / Outlook
+      </button>
+
+      <!-- Facebook -->
+      <button class="social-btn" onclick="handleLogin('facebook')">
+        <img src="https://www.facebook.com/favicon.ico" alt="Facebook" />
+        Continuar con Facebook
+      </button>
+
+      <p class="login-terms">
+        Al continuar, aceptas nuestros
+        <a href="#">Términos de uso</a> y
+        <a href="#">Política de privacidad</a>.
+        No compartimos tu información con terceros.
+      </p>
+
+      <br>
+      <a href="index.html" class="login-back">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        Volver a la tienda
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Si ya tiene sesión, redirigir
+  (async () => {
+    const user = await getUser();
+    if (user) {
+      const params = new URLSearchParams(window.location.search);
+      window.location.href = params.get('next') || 'cuenta.html';
+    }
+  })();
+
+  const handleLogin = async (provider) => {
+    document.getElementById('loginForm').style.display    = 'none';
+    document.getElementById('loginLoading').classList.add('show');
+    await loginWith(provider);
+  };
+</script>
+</body>
+</html>

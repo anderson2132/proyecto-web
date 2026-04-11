@@ -777,6 +777,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCartDrawer();
     initWelcomePopup();
     initChatbot();
+    if (typeof initAuthHeader === 'function') initAuthHeader();
   } catch (e) {
     console.error('Error al inicializar Wasi Tech:', e);
   }
