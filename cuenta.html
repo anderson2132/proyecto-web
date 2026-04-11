@@ -363,9 +363,8 @@
   </main>
 </div>
 
-<!-- Firebase SDK (compat) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
 <script src="js/main.js"></script>
 <script>
@@ -376,9 +375,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
 
   // 2. Poblar datos del usuario
-  const name     = user.displayName || user.email.split('@')[0];
-  const photo    = user.photoURL;
-  const provider = user.providerData?.[0]?.providerId || 'email';
+  const name     = user.user_metadata?.full_name || user.email.split('@')[0];
+  const photo    = user.user_metadata?.avatar_url;
+  const provider = user.app_metadata?.provider || 'email';
 
   // Avatar
   const avatarEl = document.getElementById('userAvatar');
@@ -393,20 +392,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('userEmail').textContent = user.email;
 
   // Proveedor
-  const providerEl    = document.getElementById('userProvider');
-  const providerIcons = {
-    'google.com':    '🔵 Google',
-    'facebook.com':  '🔷 Facebook',
-    'microsoft.com': '🟦 Microsoft'
-  };
+  const providerEl   = document.getElementById('userProvider');
+  const providerIcons = { google: '🔵 Google', facebook: '🔷 Facebook', azure: '🟦 Microsoft' };
   providerEl.querySelector('span').textContent = providerIcons[provider] || provider;
   providerEl.style.visibility = 'visible';
 
   // 3. Poblar formulario de datos
-  document.getElementById('infoName').value  = name;
-  document.getElementById('infoEmail').value = user.email;
+  document.getElementById('infoName').value    = name;
+  document.getElementById('infoEmail').value   = user.email;
 
-  // Recuperar datos guardados en localStorage
+  // Recuperar datos guardados en localStorage (temporal hasta integrar Supabase DB)
   const saved = JSON.parse(localStorage.getItem('wasitech_userdata') || '{}');
   if (saved.phone)   document.getElementById('infoPhone').value   = saved.phone;
   if (saved.dni)     document.getElementById('infoDNI').value     = saved.dni;

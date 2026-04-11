@@ -1,64 +1,42 @@
 // ============================================
-// WASI TECH — Firebase Auth
-// Reemplaza los valores de firebaseConfig con
-// los de tu proyecto en console.firebase.google.com
+// WASI TECH — Supabase Auth
+// Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY
+// con los valores de tu proyecto en supabase.com
 // ============================================
 
-const firebaseConfig = {
-  apiKey:            "TU_API_KEY",
-  authDomain:        "TU_PROYECTO.firebaseapp.com",
-  projectId:         "TU_PROYECTO",
-  storageBucket:     "TU_PROYECTO.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId:             "TU_APP_ID"
+const SUPABASE_URL      = 'https://TU_PROYECTO.supabase.co';
+const SUPABASE_ANON_KEY = 'TU_ANON_KEY';
+
+// Inicializar cliente Supabase
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ============================================
+// OBTENER SESIÓN ACTUAL
+// ============================================
+const getSession = async () => {
+  const { data: { session } } = await _supabase.auth.getSession();
+  return session;
 };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-// ============================================
-// OBTENER USUARIO ACTUAL
-// ============================================
-const getUser = () => auth.currentUser;
-
-const waitForUser = () =>
-  new Promise((resolve) => {
-    const unsub = auth.onAuthStateChanged((user) => {
-      unsub();
-      resolve(user);
-    });
-  });
+const getUser = async () => {
+  const session = await getSession();
+  return session?.user ?? null;
+};
 
 // ============================================
 // LOGIN CON PROVEEDOR SOCIAL
 // ============================================
-const PROVIDERS = {
-  google:    new firebase.auth.GoogleAuthProvider(),
-  facebook:  new firebase.auth.FacebookAuthProvider(),
-  microsoft: new firebase.auth.OAuthProvider('microsoft.com')
-};
-
-// Agregar scope de email a Microsoft
-PROVIDERS.microsoft.addScope('email');
-PROVIDERS.microsoft.addScope('profile');
-
-const loginWith = async (providerName) => {
-  const provider = PROVIDERS[providerName];
-  if (!provider) return;
-  try {
-    await auth.signInWithPopup(provider);
-    // Redirigir a cuenta.html tras login exitoso
-    const params = new URLSearchParams(window.location.search);
-    window.location.href = params.get('next') || 'cuenta.html';
-  } catch (err) {
-    console.error('Error login:', err.message);
-    if (err.code === 'auth/popup-closed-by-user') return;
-    if (err.code === 'auth/account-exists-with-different-credential') {
-      alert('Ya tienes una cuenta con otro método de inicio de sesión. Usa el mismo que registraste antes.');
-    } else {
-      alert('Error al iniciar sesión. Intenta de nuevo.');
+const loginWith = async (provider) => {
+  const { error } = await _supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: window.location.origin + '/cuenta.html'
     }
+  });
+  if (error) {
+    console.error('Error login:', error.message);
+    alert('Error al iniciar sesión. Intenta de nuevo.');
   }
 };
 
@@ -66,7 +44,7 @@ const loginWith = async (providerName) => {
 // CERRAR SESIÓN
 // ============================================
 const logout = async () => {
-  await auth.signOut();
+  await _supabase.auth.signOut();
   window.location.href = 'index.html';
 };
 
@@ -74,42 +52,41 @@ const logout = async () => {
 // ESCUCHAR CAMBIOS DE SESIÓN
 // ============================================
 const onAuthChange = (callback) => {
-  auth.onAuthStateChanged(callback);
+  _supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session?.user ?? null);
+  });
 };
 
 // ============================================
 // ACTUALIZAR UI DEL HEADER SEGÚN SESIÓN
 // ============================================
-const initAuthHeader = () => {
-  auth.onAuthStateChanged((user) => {
-    const accountBtn = document.querySelector('[data-account-btn]');
-    if (!accountBtn) return;
+const initAuthHeader = async () => {
+  const user = await getUser();
+  const accountBtn = document.querySelector('[data-account-btn]');
+  if (!accountBtn) return;
 
-    if (user) {
-      const name  = user.displayName || user.email.split('@')[0];
-      const photo = user.photoURL;
+  if (user) {
+    const name  = user.user_metadata?.full_name || user.email.split('@')[0];
+    const photo = user.user_metadata?.avatar_url;
 
-      accountBtn.innerHTML = photo
-        ? `<img src="${photo}" alt="${name}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
-        : `<i class="far fa-user" aria-hidden="true"></i>`;
-      accountBtn.setAttribute('title', name);
-      accountBtn.setAttribute('aria-label', `Mi cuenta — ${name}`);
-      accountBtn.onclick = () => { window.location.href = 'cuenta.html'; };
-    } else {
-      accountBtn.innerHTML = `<i class="far fa-user" aria-hidden="true"></i>`;
-      accountBtn.onclick = () => { window.location.href = 'login.html'; };
-    }
-  });
+    accountBtn.innerHTML = photo
+      ? `<img src="${photo}" alt="${name}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
+      : `<i class="far fa-user" aria-hidden="true"></i>`;
+    accountBtn.setAttribute('title', name);
+    accountBtn.setAttribute('aria-label', `Mi cuenta — ${name}`);
+    accountBtn.addEventListener('click', () => { window.location.href = 'cuenta.html'; });
+  } else {
+    accountBtn.addEventListener('click', () => { window.location.href = 'login.html'; });
+  }
 };
 
 // ============================================
 // PROTEGER PÁGINA (redirige si no hay sesión)
 // ============================================
 const requireAuth = async () => {
-  const user = await waitForUser();
+  const user = await getUser();
   if (!user) {
     window.location.href = 'login.html?next=' + encodeURIComponent(window.location.pathname);
-    return null;
   }
   return user;
 };
