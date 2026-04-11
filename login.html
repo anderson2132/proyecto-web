@@ -38,24 +38,14 @@
       text-decoration: none;
       margin-bottom: 32px;
     }
-    .login-logo .lb-wasi  { color:#fff; font-weight:900; font-size:1.1rem; letter-spacing:0.04em; }
+    .login-logo .lb-wasi    { color:#fff; font-weight:900; font-size:1.1rem; letter-spacing:0.04em; }
     .login-logo .lb-divider { width:1.5px; height:20px; background:#4ECFCA; margin:0 6px; }
-    .login-logo .lb-right  { display:flex; flex-direction:column; line-height:1.1; }
-    .login-logo .lb-tech   { color:#4ECFCA; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; }
-    .login-logo .lb-store  { color:rgba(78,207,202,0.65); font-size:0.5rem; font-weight:600; letter-spacing:0.15em; }
+    .login-logo .lb-right   { display:flex; flex-direction:column; line-height:1.1; }
+    .login-logo .lb-tech    { color:#4ECFCA; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; }
+    .login-logo .lb-store   { color:rgba(78,207,202,0.65); font-size:0.5rem; font-weight:600; letter-spacing:0.15em; }
 
-    .login-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--dark);
-      margin-bottom: 8px;
-    }
-
-    .login-sub {
-      color: var(--text-soft);
-      font-size: 0.9rem;
-      margin-bottom: 32px;
-    }
+    .login-title { font-size:1.5rem; font-weight:800; color:var(--dark); margin-bottom:8px; }
+    .login-sub   { color:var(--text-soft); font-size:0.9rem; margin-bottom:32px; }
 
     .social-btn {
       display: flex;
@@ -73,30 +63,14 @@
       cursor: pointer;
       transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
       margin-bottom: 12px;
-      text-decoration: none;
     }
     .social-btn:hover {
       border-color: var(--accent);
       box-shadow: 0 2px 12px rgba(0,102,255,0.1);
       background: var(--bg-soft);
     }
-    .social-btn img { width: 22px; height: 22px; }
-
-    .login-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 24px 0;
-      color: var(--text-soft);
-      font-size: 0.82rem;
-    }
-    .login-divider::before,
-    .login-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #E5E7EB;
-    }
+    .social-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .social-btn img { width:22px; height:22px; }
 
     .login-terms {
       font-size: 0.78rem;
@@ -127,8 +101,7 @@
     }
     .login-loading.show { display: flex; }
     .login-spinner {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border: 3px solid var(--bg-soft);
       border-top-color: var(--accent);
       border-radius: 50%;
@@ -136,9 +109,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    @media (max-width: 480px) {
-      .login-card { padding: 32px 24px; }
-    }
+    @media (max-width: 480px) { .login-card { padding: 32px 24px; } }
   </style>
 </head>
 <body>
@@ -161,7 +132,7 @@
     <!-- Loading state -->
     <div class="login-loading" id="loginLoading">
       <div class="login-spinner"></div>
-      <p style="color:var(--text-soft); font-size:0.9rem;">Conectando…</p>
+      <p style="color:var(--text-soft); font-size:0.9rem;" id="loadingMsg">Conectando…</p>
     </div>
 
     <!-- Login form -->
@@ -170,20 +141,20 @@
       <p class="login-sub">Inicia sesión para ver tus pedidos, favoritos y más.</p>
 
       <!-- Google -->
-      <button class="social-btn" onclick="handleLogin('google')">
-        <img src="https://www.google.com/favicon.ico" alt="Google" />
+      <button class="social-btn" id="btnGoogle">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
         Continuar con Google
       </button>
 
       <!-- Microsoft / Outlook -->
-      <button class="social-btn" onclick="handleLogin('azure')">
-        <img src="https://www.microsoft.com/favicon.ico" alt="Microsoft" />
+      <button class="social-btn" id="btnMicrosoft">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/microsoft.svg" alt="Microsoft" />
         Continuar con Microsoft / Outlook
       </button>
 
       <!-- Facebook -->
-      <button class="social-btn" onclick="handleLogin('facebook')">
-        <img src="https://www.facebook.com/favicon.ico" alt="Facebook" />
+      <button class="social-btn" id="btnFacebook">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="Facebook" />
         Continuar con Facebook
       </button>
 
@@ -204,24 +175,42 @@
   </div>
 </div>
 
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Firebase SDK (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="js/auth.js"></script>
 <script>
-  // Si ya tiene sesión, redirigir
-  (async () => {
-    const user = await getUser();
+  // Si ya tiene sesión activa, redirigir directamente
+  auth.onAuthStateChanged((user) => {
     if (user) {
       const params = new URLSearchParams(window.location.search);
       window.location.href = params.get('next') || 'cuenta.html';
     }
-  })();
+  });
 
-  const handleLogin = async (provider) => {
+  const showLoading = (msg = 'Conectando…') => {
     document.getElementById('loginForm').style.display    = 'none';
     document.getElementById('loginLoading').classList.add('show');
-    await loginWith(provider);
+    document.getElementById('loadingMsg').textContent     = msg;
   };
+
+  const hideLoading = () => {
+    document.getElementById('loginForm').style.display    = '';
+    document.getElementById('loginLoading').classList.remove('show');
+  };
+
+  const handleBtn = async (provider) => {
+    showLoading('Abriendo ventana de inicio de sesión…');
+    try {
+      await loginWith(provider);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  document.getElementById('btnGoogle').addEventListener('click',    () => handleBtn('google'));
+  document.getElementById('btnMicrosoft').addEventListener('click', () => handleBtn('microsoft'));
+  document.getElementById('btnFacebook').addEventListener('click',  () => handleBtn('facebook'));
 </script>
 </body>
 </html>
