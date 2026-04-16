@@ -1,7 +1,7 @@
 // ============================================
 // WASI TECH — Supabase Auth
-// Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY
-// con los valores de tu proyecto en supabase.com
+// SUPABASE_ANON_KEY es pública por diseño (Supabase la expone al cliente).
+// La seguridad real se gestiona con Row Level Security (RLS) en Supabase.
 // ============================================
 
 const SUPABASE_URL      = 'https://bqyocxfrewbtzvyiaoxv.supabase.co';
@@ -80,6 +80,17 @@ const initAuthHeader = async () => {
   } else {
     accountBtn.addEventListener('click', () => { window.location.href = 'login.html'; });
   }
+};
+
+// ============================================
+// VALIDAR URL DE REDIRECCIÓN (evita open redirect)
+// ============================================
+const safeRedirect = (url) => {
+  try {
+    const u = new URL(url, window.location.origin);
+    if (u.origin === window.location.origin) return u.pathname + u.search;
+  } catch (_) {}
+  return 'cuenta.html';
 };
 
 // ============================================

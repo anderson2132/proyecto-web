@@ -21,17 +21,18 @@
     Referrer-Policy           = "strict-origin-when-cross-origin"
     Permissions-Policy        = "geolocation=(), microphone=(), camera=()"
     X-XSS-Protection          = "1; mode=block"
+    Content-Security-Policy   = "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://assets.mailerlite.com; frame-ancestors 'none';"
 
-# Cache largo para assets estáticos
+# Cache para assets estáticos (sin immutable — se usa ?v= para cache busting)
 [[headers]]
   for = "/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000"
 
 [[headers]]
   for = "/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000"
 
 [[headers]]
   for = "/img/*"

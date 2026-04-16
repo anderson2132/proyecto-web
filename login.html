@@ -208,12 +208,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/auth.js"></script>
 <script>
-  // Si ya tiene sesión, redirigir
+  // Si ya tiene sesión, redirigir (validando ?next= para evitar open redirect)
   (async () => {
     const user = await getUser();
     if (user) {
       const params = new URLSearchParams(window.location.search);
-      window.location.href = params.get('next') || 'cuenta.html';
+      window.location.href = safeRedirect(params.get('next') || 'cuenta.html');
     }
   })();
 

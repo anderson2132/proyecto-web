@@ -24,7 +24,8 @@ exports.handler = async function(event) {
     // const transporter = nodemailer.createTransporter({ ... });
     // await transporter.sendMail({ to: email, subject: `Pedido ${order_id}` });
 
-    console.log(`Confirmación pendiente para: ${email} - Pedido: ${order_id}`);
+    // Sin datos personales en logs (PII) — solo el ID de pedido
+    console.log(`Confirmación en cola - Pedido: ${order_id}`);
 
     return {
       statusCode: 200,
